@@ -3,6 +3,7 @@ import tw, { useDeviceContext } from 'twrnc';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import 'react-native-reanimated'; 
+import MasonryList from '@react-native-seoul/masonry-list';
 
 function App() {
   useDeviceContext(tw);
