@@ -22,12 +22,13 @@ function HomeScreen({ navigation }) {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-0.5 mx-auto bg-purple-300 rounded-sm px-1`}> 
-      <Text>{item.title} {item.id}</Text>
+      <Text style={tw`font-bold`}>{item.title}</Text>
+      <Text>{item.content}</Text>
     </TouchableOpacity>
   )
 
   return (
-    <View style={tw`flex-1 items-center justify-center bg-purple-400`}>
+    <View style={tw`flex-1 items-center justify-center bg-slate-900`}>
       {searchData ? 
         <MasonryList
           style={tw`px-0.5 pt-0.5 pb-20`}
@@ -39,7 +40,7 @@ function HomeScreen({ navigation }) {
         />  
         : <></>
       }
-      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-blue-500 rounded-full absolute bottom-[5%] right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
+      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>+</Text>
       </TouchableOpacity>
     </View>
