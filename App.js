@@ -52,8 +52,10 @@ function EditScreen({ route, navigation }) {
   }, []);
 
   return (
+    
     <View style={tw`flex-1 items-center justify-center bg-purple-400`}>
-      <Text style={tw`text-lg text-white`}>Edit Screen {route.params.data.title} {route.params.data.id}</Text>
+      <Text style={tw`text-lg text-white`}>{route.params.data.title}</Text>
+      <Text style={tw`text-lg text-white`}>{route.params.data.content}</Text>
     </View>
   );
 }
@@ -74,7 +76,7 @@ export default function App() {
               headerTitleStyle: tw`font-bold`,
               headerShadowVisible: false, // gets rid of border on device
             }}
-            name="Leland's Notes"
+            name="Notes"
             component={HomeScreen}
           />
           <Stack.Screen
