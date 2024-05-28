@@ -66,7 +66,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Notes">
           <Stack.Screen
             options={{
               headerStyle: tw`bg-purple-300 border-0`,
@@ -74,7 +74,7 @@ export default function App() {
               headerTitleStyle: tw`font-bold`,
               headerShadowVisible: false, // gets rid of border on device
             }}
-            name="Home"
+            name="Leland's Notes"
             component={HomeScreen}
           />
           <Stack.Screen
