@@ -21,8 +21,9 @@ function HomeScreen({ navigation }) {
   }, [addNoteData]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-0.5 mx-auto bg-purple-300 rounded-sm px-1`}> 
-      <Text style={tw`font-bold`}>{item.title}</Text>
+    <TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}> 
+      <Text style={tw`font-bold text-center mb-2.5`}>{item.title}</Text>
+      
       <Text>{item.content}</Text>
     </TouchableOpacity>
   )
@@ -40,7 +41,7 @@ function HomeScreen({ navigation }) {
         />  
         : <></>
       }
-      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] right-8 mx-auto items-center flex-1 justify-center w-12 h-12`}>
+      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-12 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>+</Text>
       </TouchableOpacity>
     </View>
@@ -54,9 +55,9 @@ function EditScreen({ route, navigation }) {
 
   return (
     
-    <View style={tw`flex-1 items-center justify-center bg-purple-400`}>
-      <Text style={tw`text-lg text-white`}>{route.params.data.title}</Text>
-      <Text style={tw`text-lg text-white`}>{route.params.data.content}</Text>
+    <View style={tw`flex-1 items-center justify-center bg-amber-200`}>
+      <Text style={tw`text-lg text-black`}>{route.params.data.title}</Text>
+      <Text style={tw`text-lg text-black`}>{route.params.data.content}</Text>
     </View>
   );
 }
@@ -72,17 +73,17 @@ export default function App() {
         <Stack.Navigator initialRouteName="Notes">
           <Stack.Screen
             options={{
-              headerStyle: tw`bg-purple-300 border-0`,
+              headerStyle: tw`bg-slate-800 border-0`,
               headerTintColor: '#fff',
               headerTitleStyle: tw`font-bold`,
               headerShadowVisible: false, // gets rid of border on device
             }}
-            name="Notes"
+            name="My Notes"
             component={HomeScreen}
           />
           <Stack.Screen
             options={{
-              headerStyle: tw`bg-purple-300 border-0`,
+              headerStyle: tw`bg-slate-800 border-0`,
               headerTintColor: '#fff',
               headerTitleStyle: tw`font-bold`,
               headerShadowVisible: false, // gets rid of border on device
