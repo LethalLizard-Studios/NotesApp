@@ -6,12 +6,12 @@ import tw, { useDeviceContext } from 'twrnc';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import MasonryList from '@react-native-seoul/masonry-list'
-import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation } from './db';
+import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } from './db';
 
 function HomeScreen({ navigation }) {
   const { data: searchData, error, isLoading } = useSearchNotesQuery("");
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
-  const [ deleteNote ] = useDeleteNoteMutation();
+  const [ editNote, { data: editNoteData, error: editNoteError }] = useUpdateNoteMutation();
   
   useEffect(() => {
     if (addNoteData != undefined) {
@@ -20,11 +20,18 @@ function HomeScreen({ navigation }) {
     }
   }, [addNoteData]);
 
+  useEffect(() => {
+    if (editNoteData != undefined) {
+      console.log(editNoteData.title);
+      navigation.navigate("Edit", {data: editNoteData});
+    }
+  }, [editNoteData]);
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}> 
-      <Text style={tw`font-bold text-center mb-2.5`}>{item.title}</Text>
-      
-      <Text>{item.content}</Text>
+    //<TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>
+    <TouchableOpacity onPress={() => editNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
+      <Text style={tw`font-bold text-center mb-2.5`}>{item.id}</Text>
+      <Text style={tw`text-center mb-2.5`}>{item.content}</Text>
     </TouchableOpacity>
   )
 
@@ -41,7 +48,7 @@ function HomeScreen({ navigation }) {
         />  
         : <></>
       }
-      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-12 h-12`}>
+      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-24 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>+</Text>
       </TouchableOpacity>
     </View>
@@ -49,15 +56,27 @@ function HomeScreen({ navigation }) {
 }
 
 function EditScreen({ route, navigation }) {
+  const [ deleteNote, { data: deleteNoteData, error: deleteNoteError }] = useDeleteNoteMutation();
+
   useLayoutEffect(() => {
-    navigation.setOptions({ title: route.params.data.title });
+    navigation.setOptions({ title: route.params.data.id });
   }, []);
+
+  useEffect(() => {
+    if (deleteNoteData != undefined) {
+      navigation.navigate("My Notes");
+    }
+  }, [deleteNoteData]);
 
   return (
     
     <View style={tw`flex-1 items-center justify-center bg-amber-200`}>
       <Text style={tw`text-lg text-black`}>{route.params.data.title}</Text>
       <Text style={tw`text-lg text-black`}>{route.params.data.content}</Text>
+
+      <TouchableOpacity onPress={() => { deleteNote(route.params.data) }} style={tw`bg-red-900 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-36 h-12`}>
+        <Text style={tw`text-white text-center text-3xl mt--1`}>Delete</Text>
+      </TouchableOpacity>
     </View>
   );
 }
