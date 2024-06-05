@@ -9,7 +9,24 @@ import MasonryList from '@react-native-seoul/masonry-list'
 import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } from './db';
 
 function HomeScreen({ navigation }) {
-  const { data: searchData, error, isLoading } = useSearchNotesQuery("");
+  const [actualSearch, onActualSearch] = useState("");
+  const [searchText, onChangeSearch] = useState("");
+
+  const { data: searchData, error, isLoading } = useSearchNotesQuery(actualSearch);
+
+  const handleSearch = () => {
+    console.log("search:",searchText);
+    onActualSearch(searchText);
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: "My Notes" });
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={handleSearch} title="Search" />
+      ),
+    });
+  }, [navigation, searchText, actualSearch]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: item}) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
@@ -20,6 +37,11 @@ function HomeScreen({ navigation }) {
 
   return (
     <View style={tw`flex-1 items-center justify-center bg-slate-900`}>
+      <TextInput
+        style={styles.search}
+        onChangeText={search => onChangeSearch(search)}
+        placeholder="Search"
+      />
       {searchData ? 
         <MasonryList
           style={tw`px-0.5 pt-0.5 pb-20`}
@@ -47,7 +69,9 @@ function EditScreen({ route, navigation }) {
 
   const handleEditNote = () => {
     console.log("edit:",contentText);
-    editNote({title: titleText, content: contentText})
+    route.params.data.title = titleText;
+    route.params.data.content = contentText;
+    editNote(route.params.data);
   }
 
   useLayoutEffect(() => {
@@ -196,5 +220,12 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     fontSize: 24,
+  },
+  search: {
+    width: 'auto',
+    padding: 10,
+    fontSize: 24,
+    backgroundColor: '#ffffff',
+    color: '#000',
   },
 });
