@@ -51,7 +51,12 @@ function EditScreen({ route, navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: route.params.data.id });
-  }, []);
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => {deleteNote(route.params.data)}} title="Delete" />
+      ),
+    });
+  }, [navigation]);
 
   useEffect(() => {
     if (deleteNoteData != undefined) {
@@ -60,14 +65,9 @@ function EditScreen({ route, navigation }) {
   }, [deleteNoteData]);
 
   return (
-    
-    <View style={tw`flex-1 items-center justify-center bg-amber-200`}>
+    <View style={tw`flex-1 items-center bg-amber-200`}>
       <Text style={tw`text-lg text-black`}>{route.params.data.title}</Text>
       <Text style={tw`text-lg text-black`}>{route.params.data.content}</Text>
-
-      <TouchableOpacity onPress={() => { deleteNote(route.params.data) }} style={tw`bg-red-900 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-36 h-12`}>
-        <Text style={tw`text-white text-center text-3xl mt--1`}>Delete</Text>
-      </TouchableOpacity>
     </View>
   );
 }
