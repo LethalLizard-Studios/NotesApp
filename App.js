@@ -81,20 +81,12 @@ function EditScreen({ route, navigation }) {
   const [titleText, onChangeTitle] = useState(route.params.data.title);
   const [contentText, onChangeContent] = useState(route.params.data.content);
 
-  const handleEditNote = () => {
-    console.log("edit:",contentText);
-    route.params.data.title = titleText;
-    route.params.data.content = contentText;
-    editNote(route.params.data);
-  }
-
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Edit" });
     navigation.setOptions({
       headerRight: () => (
         <View style={{flexDirection:"row"}}>
           <Button onPress={() => {deleteNote(route.params.data)}} title="Delete" />
-          <Button onPress={handleEditNote} title="Save" />
         </View>
       ),
     });
@@ -107,10 +99,10 @@ function EditScreen({ route, navigation }) {
   }, [deleteNoteData]);
 
   useEffect(() => {
-    if (editNoteData != undefined) {
-      navigation.navigate("My Notes");
-    }
-  }, [editNoteData, titleText, contentText]);
+    return () => {
+      editNote({ id: route.params.data.id, content: contentText, title: titleText });
+    };
+  }, [contentText, titleText]);
 
   return (
     <View style={tw`flex-1 items-center bg-amber-200`}>
