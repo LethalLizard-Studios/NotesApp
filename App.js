@@ -21,11 +21,6 @@ function HomeScreen({ navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: "My Notes" });
-    navigation.setOptions({
-      headerRight: () => (
-        <Button onPress={handleSearch} title="Search" />
-      ),
-    });
   }, [navigation, searchText, actualSearch]);
 
   const renderItem = ({ item }) => (
@@ -40,6 +35,7 @@ function HomeScreen({ navigation }) {
       <TextInput
         style={styles.search}
         onChangeText={search => onChangeSearch(search)}
+        onSubmitEditing={handleSearch}
         placeholder="Search"
       />
       {searchData ? 
@@ -223,9 +219,12 @@ const styles = StyleSheet.create({
   },
   search: {
     width: 'auto',
-    padding: 10,
+    margin: 10,
+    padding: 6,
+    paddingHorizontal: 50,
     fontSize: 24,
     backgroundColor: '#ffffff',
     color: '#000',
+    borderRadius: 32,
   },
 });
