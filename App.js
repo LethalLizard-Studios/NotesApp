@@ -10,15 +10,7 @@ import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpda
 
 function HomeScreen({ navigation }) {
   const { data: searchData, error, isLoading } = useSearchNotesQuery("");
-  const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
   const [ editNote, { data: editNoteData, error: editNoteError }] = useUpdateNoteMutation();
-  
-  useEffect(() => {
-    if (addNoteData != undefined) {
-      console.log(addNoteData.title);
-      navigation.navigate("My Notes");
-    }
-  }, [addNoteData]);
 
   useEffect(() => {
     if (editNoteData != undefined) {
@@ -82,6 +74,8 @@ function EditScreen({ route, navigation }) {
 }
 
 function AddScreen({ route, navigation }) {
+  const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
+
   const [titleText, onChangeTitle] = useState("Title");
   const [contentText, onChangeContent] = useState("Content");
 
@@ -89,13 +83,20 @@ function AddScreen({ route, navigation }) {
     navigation.setOptions({ title: "New Note" });
     navigation.setOptions({
       headerRight: () => (
-        <Button onPress={() => addNote({title: "titleText", content: "contentText"})} title="Add" />
+        <Button onPress={() => { addNote({title: "titleText", content: "contentText"}) }} title="Add" />
       ),
     });
   }, [navigation]);
 
+  useEffect(() => {
+    if (addNoteData != undefined) {
+      console.log(addNoteData.title);
+      navigation.navigate("My Notes");
+    }
+  }, [addNoteData]);
+
   return (
-    <View style={tw`flex-1 items-center justify-top bg-amber-200`}>
+    <View style={tw`flex-1 items-center bg-amber-200`}>
       <TextInput
         style={styles.input}
         onChangeText={(value) => onChangeTitle(value)}
