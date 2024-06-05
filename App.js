@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { TouchableOpacity, View, Text, TextInput, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw, { useDeviceContext } from 'twrnc';
@@ -16,7 +16,7 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     if (addNoteData != undefined) {
       console.log(addNoteData.title);
-      navigation.navigate("Edit", {data: addNoteData});
+      navigation.navigate("Add", {data: addNoteData});
     }
   }, [addNoteData]);
 
@@ -81,6 +81,32 @@ function EditScreen({ route, navigation }) {
   );
 }
 
+function AddScreen({ route, navigation }) {
+  const [title, onChangeTitle] = useState("Title");
+  const [content, onChangeContent] = useState("Content");
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: "New Note" });
+  }, []);
+
+  return (
+    
+    <View style={tw`flex-1 items-center justify-top bg-amber-200`}>
+      <TextInput
+        style={styles.input}
+        onChangeText={(value) => onChangeTitle(value)}
+        placeholder="Title"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={(value) => onChangeContent(value)}
+        placeholder="Content"
+        multiline={true}
+      />
+    </View>
+  );
+}
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -110,8 +136,26 @@ export default function App() {
             name="Edit"
             component={EditScreen}
           />
+          <Stack.Screen
+            options={{
+              headerStyle: tw`bg-slate-800 border-0`,
+              headerTintColor: '#fff',
+              headerTitleStyle: tw`font-bold`,
+              headerShadowVisible: false, // gets rid of border on device
+            }}
+            name="Add"
+            component={AddScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 10,
+    padding: 10,
+  },
+});
