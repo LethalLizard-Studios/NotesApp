@@ -21,7 +21,7 @@ function HomeScreen({ navigation }) {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => editNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
-      <Text style={tw`font-bold text-center mb-2.5`}>{item.id}</Text>
+      <Text style={tw`font-bold text-center mb-2.5`}>{item.title}</Text>
       <Text style={tw`text-center mb-2.5`}>{item.content}</Text>
     </TouchableOpacity>
   )
