@@ -98,7 +98,7 @@ function AddScreen({ route, navigation }) {
         placeholder="Title"
       />
       <TextInput
-        style={styles.input}
+        style={styles.inputcontent}
         onChangeText={(value) => onChangeContent(value)}
         placeholder="Content"
         multiline={true}
@@ -154,8 +154,15 @@ export default function App() {
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
+    height: 60,
     margin: 10,
     padding: 10,
+    fontSize: 24,
+  },
+  inputcontent: {
+    flexGrow: 1,
+    margin: 10,
+    padding: 10,
+    fontSize: 24,
   },
 });
