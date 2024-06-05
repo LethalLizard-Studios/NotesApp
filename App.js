@@ -20,7 +20,6 @@ function HomeScreen({ navigation }) {
   }, [editNoteData]);
 
   const renderItem = ({ item }) => (
-    //<TouchableOpacity onPress={() => deleteNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>
     <TouchableOpacity onPress={() => editNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
       <Text style={tw`font-bold text-center mb-2.5`}>{item.id}</Text>
       <Text style={tw`text-center mb-2.5`}>{item.content}</Text>
@@ -76,14 +75,14 @@ function EditScreen({ route, navigation }) {
 function AddScreen({ route, navigation }) {
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
 
-  const [titleText, onChangeTitle] = useState("Title");
-  const [contentText, onChangeContent] = useState("Content");
+  const [titleText, onChangeTitle] = useState("Test");
+  const [contentText, onChangeContent] = useState("Oh...");
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: "New Note" });
     navigation.setOptions({
       headerRight: () => (
-        <Button onPress={() => { addNote({title: "titleText", content: "contentText"}) }} title="Add" />
+        <Button onPress={() => { addNote({title: titleText, content: contentText}) }} title="Add" />
       ),
     });
   }, [navigation]);
@@ -99,12 +98,12 @@ function AddScreen({ route, navigation }) {
     <View style={tw`flex-1 items-center bg-amber-200`}>
       <TextInput
         style={styles.input}
-        onChangeText={(value) => onChangeTitle(value)}
+        onChangeText={(titleText) => onChangeTitle(titleText)}
         placeholder="Title"
       />
       <TextInput
         style={styles.inputcontent}
-        onChangeText={(value) => onChangeContent(value)}
+        onChangeText={(contentText) => onChangeContent(contentText)}
         placeholder="Content"
         multiline={true}
       />
