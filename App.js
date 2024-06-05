@@ -14,17 +14,35 @@ function HomeScreen({ navigation }) {
 
   const { data: searchData, error, isLoading } = useSearchNotesQuery(actualSearch);
 
+  const [count, setCount] = useState(0); 
+
+  const noteColors = [
+    'rgb(253, 230, 138)', 'rgb(239, 68, 68)', '#6495ed',
+    '#8fbc8f', '#adff2f',
+  ]
+
   const handleSearch = () => {
     console.log("search:",searchText);
     onActualSearch(searchText);
   }
 
+  const handleColorSwap = () => {
+    setCount((count + 1) % noteColors.length);
+  }
+
   useLayoutEffect(() => {
     navigation.setOptions({ title: "My Notes" });
-  }, [navigation, searchText, actualSearch]);
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={{flexDirection:"row"}}>
+          <Button onPress={handleColorSwap} title="Note Color" />
+        </View>
+      ),
+    });
+  }, [navigation, searchText, actualSearch, count]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: item}) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
+    <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: item}) } style={{ backgroundColor:noteColors[count] }}>  
       <Text style={tw`font-bold text-center mb-2.5`}>{item.title}</Text>
       <Text style={tw`text-center mb-2.5`}>{item.content}</Text>
     </TouchableOpacity>
