@@ -50,7 +50,7 @@ function EditScreen({ route, navigation }) {
   const [ deleteNote, { data: deleteNoteData, error: deleteNoteError }] = useDeleteNoteMutation();
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: route.params.data.id });
+    navigation.setOptions({ title: route.params.data.title });
     navigation.setOptions({
       headerRight: () => (
         <Button onPress={() => {deleteNote(route.params.data)}} title="Delete" />
@@ -66,8 +66,7 @@ function EditScreen({ route, navigation }) {
 
   return (
     <View style={tw`flex-1 items-center bg-amber-200`}>
-      <Text style={tw`text-lg text-black`}>{route.params.data.title}</Text>
-      <Text style={tw`text-lg text-black`}>{route.params.data.content}</Text>
+      <Text style={styles.input}>{route.params.data.content}</Text>
     </View>
   );
 }
