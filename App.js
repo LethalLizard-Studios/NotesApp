@@ -85,9 +85,7 @@ function EditScreen({ route, navigation }) {
     navigation.setOptions({ title: "Edit" });
     navigation.setOptions({
       headerRight: () => (
-        <View style={{flexDirection:"row"}}>
           <Button onPress={() => {deleteNote(route.params.data)}} title="Delete" />
-        </View>
       ),
     });
   }, [navigation, contentText]);
