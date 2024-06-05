@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { TouchableOpacity, View, Text, TextInput, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, TextInput, StyleSheet, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw, { useDeviceContext } from 'twrnc';
@@ -16,7 +16,7 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     if (addNoteData != undefined) {
       console.log(addNoteData.title);
-      navigation.navigate("Add", {data: addNoteData});
+      navigation.navigate("My Notes");
     }
   }, [addNoteData]);
 
@@ -48,7 +48,7 @@ function HomeScreen({ navigation }) {
         />  
         : <></>
       }
-      <TouchableOpacity onPress={() => { addNote({title: "test", content: "content"}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-24 h-12`}>
+      <TouchableOpacity onPress={() => { navigation.navigate("Add", {data: ""}); }} style={tw`bg-slate-600 rounded-full absolute bottom-[5%] mx-auto items-center flex-1 justify-center w-24 h-12`}>
         <Text style={tw`text-white text-center text-3xl mt--1`}>+</Text>
       </TouchableOpacity>
     </View>
@@ -82,15 +82,19 @@ function EditScreen({ route, navigation }) {
 }
 
 function AddScreen({ route, navigation }) {
-  const [title, onChangeTitle] = useState("Title");
-  const [content, onChangeContent] = useState("Content");
+  const [titleText, onChangeTitle] = useState("Title");
+  const [contentText, onChangeContent] = useState("Content");
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: "New Note" });
-  }, []);
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => addNote({title: "titleText", content: "contentText"})} title="Add" />
+      ),
+    });
+  }, [navigation]);
 
   return (
-    
     <View style={tw`flex-1 items-center justify-top bg-amber-200`}>
       <TextInput
         style={styles.input}
