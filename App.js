@@ -75,17 +75,22 @@ function EditScreen({ route, navigation }) {
 function AddScreen({ route, navigation }) {
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
 
-  const [titleText, onChangeTitle] = useState("Test");
-  const [contentText, onChangeContent] = useState("Oh...");
+  const [titleText, onChangeTitle] = useState('');
+  const [contentText, onChangeContent] = useState('');
+
+  const handleAddNote = () => {
+    console.log("title:",titleText);
+    addNote({title: titleText, content: contentText})
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: "New Note" });
     navigation.setOptions({
       headerRight: () => (
-        <Button onPress={() => { addNote({title: titleText, content: contentText}) }} title="Add" />
+        <Button onPress={handleAddNote} title="Add" />
       ),
     });
-  }, [navigation]);
+  }, [navigation, titleText, contentText]);
 
   useEffect(() => {
     if (addNoteData != undefined) {
@@ -98,12 +103,14 @@ function AddScreen({ route, navigation }) {
     <View style={tw`flex-1 items-center bg-amber-200`}>
       <TextInput
         style={styles.input}
-        onChangeText={(titleText) => onChangeTitle(titleText)}
+        onChangeText={title => onChangeTitle(title)}
+        value={titleText}
         placeholder="Title"
       />
       <TextInput
         style={styles.inputcontent}
-        onChangeText={(contentText) => onChangeContent(contentText)}
+        onChangeText={content => onChangeContent(content)}
+        value={contentText}
         placeholder="Content"
         multiline={true}
       />
