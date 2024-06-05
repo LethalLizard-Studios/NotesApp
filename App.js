@@ -10,17 +10,9 @@ import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpda
 
 function HomeScreen({ navigation }) {
   const { data: searchData, error, isLoading } = useSearchNotesQuery("");
-  const [ editNote, { data: editNoteData, error: editNoteError }] = useUpdateNoteMutation();
-
-  useEffect(() => {
-    if (editNoteData != undefined) {
-      console.log(editNoteData.title);
-      navigation.navigate("Edit", {data: editNoteData});
-    }
-  }, [editNoteData]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => editNote(item) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
+    <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: item}) } style={tw`w-[98%] mb-1 mx-auto bg-amber-200 rounded-sm px-1`}>  
       <Text style={tw`font-bold text-center mb-2.5`}>{item.title}</Text>
       <Text style={tw`text-center mb-2.5`}>{item.content}</Text>
     </TouchableOpacity>
@@ -48,15 +40,27 @@ function HomeScreen({ navigation }) {
 
 function EditScreen({ route, navigation }) {
   const [ deleteNote, { data: deleteNoteData, error: deleteNoteError }] = useDeleteNoteMutation();
+  const [ editNote, { data: editNoteData, error: editNoteError }] = useUpdateNoteMutation();
+
+  const [titleText, onChangeTitle] = useState(route.params.data.title);
+  const [contentText, onChangeContent] = useState(route.params.data.content);
+
+  const handleEditNote = () => {
+    console.log("edit:",contentText);
+    editNote({title: titleText, content: contentText})
+  }
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: route.params.data.title });
+    navigation.setOptions({ title: "Edit" });
     navigation.setOptions({
       headerRight: () => (
-        <Button onPress={() => {deleteNote(route.params.data)}} title="Delete" />
+        <View style={{flexDirection:"row"}}>
+          <Button onPress={() => {deleteNote(route.params.data)}} title="Delete" />
+          <Button onPress={handleEditNote} title="Save" />
+        </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, contentText]);
 
   useEffect(() => {
     if (deleteNoteData != undefined) {
@@ -64,9 +68,27 @@ function EditScreen({ route, navigation }) {
     }
   }, [deleteNoteData]);
 
+  useEffect(() => {
+    if (editNoteData != undefined) {
+      navigation.navigate("My Notes");
+    }
+  }, [editNoteData, titleText, contentText]);
+
   return (
     <View style={tw`flex-1 items-center bg-amber-200`}>
-      <Text style={styles.input}>{route.params.data.content}</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={title => onChangeTitle(title)}
+        value={titleText}
+        placeholder="Title"
+      />
+      <TextInput
+        style={styles.inputcontent}
+        onChangeText={content => onChangeContent(content)}
+        value={contentText}
+        placeholder="Content"
+        multiline={true}
+      />
     </View>
   );
 }
