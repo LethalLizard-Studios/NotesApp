@@ -8,6 +8,7 @@ import { store } from './store';
 import MasonryList from '@react-native-seoul/masonry-list'
 import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } from './db';
 
+/*Main Screen containing the masonrylist of notes*/
 function HomeScreen({ navigation }) {
   const [actualSearch, onActualSearch] = useState("");
   const [searchText, onChangeSearch] = useState("");
@@ -16,20 +17,24 @@ function HomeScreen({ navigation }) {
 
   const [count, setCount] = useState(0); 
 
+  /*Array of colors used on notes*/
   const noteColors = [
     'rgb(253, 230, 138)', 'rgb(239, 68, 68)', '#6495ed',
     '#8fbc8f', '#adff2f',
   ]
 
+  /*Submits search which updates query automatically*/
   const handleSearch = () => {
     console.log("search:",searchText);
     onActualSearch(searchText);
   }
 
   const handleColorSwap = () => {
+    /*Set current color index to next color in bounds*/
     setCount((count + 1) % noteColors.length);
   }
 
+  /*Changes title and adds note color button to header*/
   useLayoutEffect(() => {
     navigation.setOptions({ title: "My Notes" });
     navigation.setOptions({
@@ -41,6 +46,7 @@ function HomeScreen({ navigation }) {
     });
   }, [navigation, searchText, actualSearch, count]);
 
+  /*Used to render each individual note item*/
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate("Edit", {data: item}) } style={{ backgroundColor:noteColors[count] }}>  
       <Text style={tw`font-bold text-center mb-2.5`}>{item.title}</Text>
@@ -49,6 +55,7 @@ function HomeScreen({ navigation }) {
   )
 
   return (
+    /*Searchbar, masonrylist of all notes and add button*/
     <View style={tw`flex-1 items-center justify-center bg-slate-900`}>
       <TextInput
         style={styles.search}
@@ -74,6 +81,7 @@ function HomeScreen({ navigation }) {
   );
 }
 
+/*Edit screen used to edit existing notes*/
 function EditScreen({ route, navigation }) {
   const [ deleteNote, { data: deleteNoteData, error: deleteNoteError }] = useDeleteNoteMutation();
   const [ editNote, { data: editNoteData, error: editNoteError }] = useUpdateNoteMutation();
@@ -81,6 +89,7 @@ function EditScreen({ route, navigation }) {
   const [titleText, onChangeTitle] = useState(route.params.data.title);
   const [contentText, onChangeContent] = useState(route.params.data.content);
 
+  /*Changes title and adds delete button to header*/
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Edit" });
     navigation.setOptions({
@@ -90,18 +99,21 @@ function EditScreen({ route, navigation }) {
     });
   }, [navigation, contentText]);
 
+  /*Once deleteNoteData is set go back to my notes since the note is deleted*/
   useEffect(() => {
     if (deleteNoteData != undefined) {
       navigation.navigate("My Notes");
     }
   }, [deleteNoteData]);
 
+  /*Updates the notes data using the input texts*/
   useEffect(() => {
     return () => {
       editNote({ id: route.params.data.id, content: contentText, title: titleText });
     };
   }, [contentText, titleText]);
 
+  /*Two text inputs for the title and content*/
   return (
     <View style={tw`flex-1 items-center bg-amber-200`}>
       <TextInput
@@ -121,6 +133,7 @@ function EditScreen({ route, navigation }) {
   );
 }
 
+/*Used to add new notes by inputing title and content*/
 function AddScreen({ route, navigation }) {
   const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation();
 
@@ -132,6 +145,7 @@ function AddScreen({ route, navigation }) {
     addNote({title: titleText, content: contentText})
   }
 
+  /*Changes title and adds note color button to header*/
   useLayoutEffect(() => {
     navigation.setOptions({ title: "New Note" });
     navigation.setOptions({
