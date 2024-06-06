@@ -15,6 +15,7 @@ function HomeScreen({ navigation }) {
 
   const { data: searchData, error, isLoading } = useSearchNotesQuery(actualSearch);
 
+  /*Count used for index of what note color is used*/
   const [count, setCount] = useState(0); 
 
   /*Array of colors used on notes*/
@@ -140,12 +141,13 @@ function AddScreen({ route, navigation }) {
   const [titleText, onChangeTitle] = useState('');
   const [contentText, onChangeContent] = useState('');
 
+  /*Add new note using the users title and content input*/
   const handleAddNote = () => {
     console.log("title:",titleText);
     addNote({title: titleText, content: contentText})
   }
 
-  /*Changes title and adds note color button to header*/
+  /*Changes title and adds add button to header*/
   useLayoutEffect(() => {
     navigation.setOptions({ title: "New Note" });
     navigation.setOptions({
@@ -155,6 +157,7 @@ function AddScreen({ route, navigation }) {
     });
   }, [navigation, titleText, contentText]);
 
+  /*When note is added navigate back to my notes*/
   useEffect(() => {
     if (addNoteData != undefined) {
       console.log(addNoteData.title);
@@ -162,6 +165,7 @@ function AddScreen({ route, navigation }) {
     }
   }, [addNoteData]);
 
+  /*Two text inputs for the title and content*/
   return (
     <View style={tw`flex-1 items-center bg-amber-200`}>
       <TextInput
@@ -186,6 +190,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   useDeviceContext(tw);
 
+  /*Adds all navigation screens and header settings*/
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -226,6 +231,7 @@ export default function App() {
   );
 }
 
+/*Styles used for textinputs*/
 const styles = StyleSheet.create({
   input: {
     height: 60,
